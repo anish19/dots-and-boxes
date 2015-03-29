@@ -12,7 +12,7 @@ public class Main {
     private JFrame frame;
     private JLabel modeError, sizeError;
 
-    String[] players = {"Select player", "Human", "Computer (Level-1)", "Computer (Level-2)", "Computer (Level-3)"};
+    String[] players = {"Select player", "Human", "Random Player", "Greedy Player", "Minimax Search", "Alpha-Beta Pruning","Monte Carlo Search"};
     private JRadioButton[] sizeButton;
 
     JComboBox<String> redList, blueList;
@@ -42,6 +42,15 @@ public class Main {
 
     private boolean startGame;
 
+    private GameSolver getSolver(int level) {
+        if(level == 1) return new RandomSolver();
+        else if(level == 2) return new GreedySolver();
+        else if(level == 3) return new MinimaxSolver();
+        else if(level == 4) return new AlphaBetaSolver();
+        else if(level == 5) return new MCSolver();
+        else return null;
+    }
+
     private ActionListener submitListener = new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent actionEvent) {
@@ -55,8 +64,8 @@ public class Main {
                 modeError.setText("");
                 redName = players[rIndex];
                 blueName = players[bIndex];
-                if(rIndex > 1) redSolver = new RandomSolver();
-                if(bIndex > 1) blueSolver = new RandomSolver();
+                if(rIndex > 1) redSolver = getSolver(rIndex - 1);
+                if(bIndex > 1) blueSolver = getSolver(bIndex - 1);
             }
             for(int i=0; i<8; i++) {
                 if(sizeButton[i].isSelected()) {
@@ -79,7 +88,7 @@ public class Main {
 
         constraints.gridx = 0;
         constraints.gridy = 0;
-        JLabel titleLabel = new JLabel(new ImageIcon("title.png"));
+        JLabel titleLabel = new JLabel(new ImageIcon(getClass().getResource("title.png")));
         grid.add(titleLabel, constraints);
 
         ++constraints.gridy;
